@@ -1,2 +1,0 @@
-export const FETCH_STREAMS = 'FETCH_STREAMS'
-export const RECEIVE_STREAMS = 'RECEIVE_STREAMS'
