@@ -1,22 +1,23 @@
-// import firebase from "firebase";
-// var config = {
-//   apiKey: "AIzaSyBQLdu33tHDbRavR_SrlGajjafoajT381Y",
-//   authDomain: "twitch-project-2.firebaseapp.com",
-//   databaseURL: "https://twitch-project-2.firebaseio.com",
-//   projectId: "twitch-project-2",
-//   storageBucket: "twitch-project-2.appspot.com",
-//   messagingSenderId: "1027517745569"
-// };
-// var fire = firebase.initializeApp(config);
-// export default fire;
+import axios from "axios";
+import * as _ from "lodash";
 
+const axios_instance = axios.create({
+  baseURL:
+    "https://firestore.googleapis.com/v1beta1/projects/twitch-project-2/databases/(default)/documents"
+});
 
-export var getStreams = () => {
-    return fetch("https://firestore.googleapis.com/v1beta1/projects/twitch-project-2/databases/(default)/documents/new-viewer-data")
-        .then((res)=>{
-            return res.json()
-        })
-        .then((data)=>{
-            return data.documents
-        })
-}
+export let getStreams = () => {
+  return axios_instance
+    .get("/new-viewer-data", {
+      params: {
+        page_size: 99
+      }
+    })
+    .then(res => {
+      return res.data;
+    })
+    .then(data => {
+      return data.documents;
+    });
+};
+

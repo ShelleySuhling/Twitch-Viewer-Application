@@ -8,6 +8,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
         <header className="App-header"></header>
         <Router>
           <Route exact path="/" component={Home} />

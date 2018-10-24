@@ -1,34 +1,84 @@
-import React, { Component } from 'react';
-import * as firebaseAPI from '../firebase/firebaseAPI'
-import * as _ from 'lodash'
+import React, { Component } from "react";
+import * as _ from "lodash";
+import * as firebaseAPI from "../firebase/firebaseAPI";
+import BarChart from "../components/BarChart";
+import bootstrap from "bootstrap";
+import * as d3helpers from '../helpers/d3-helpers'
 
-class Home extends Component {    
+class Home extends Component {
+  constructor() {
+    super();
+    this.state = {loaded: false};
+  }
 
-    constructor(){
-        super()
-        this.state = {}
+  componentWillMount() {
+    firebaseAPI.getStreams().then((streams)=>{
+      let tmp_data = d3helpers.pruneAndSort(streams)
+      this.hourData = d3helpers.getAverageViewersByHour(tmp_data)
+      this.weekdayData = d3helpers.getAverageViewersByWeekday(tmp_data)
+      this.setState({
+        data: tmp_data,
+        currentDisplay: this.hourData,
+        timeFormatting: "%H h", 
+        loaded: true,
+      })
+    })
+  
+    
+    console.log("componentWillMount", this.state)
+  }
+
+  changeViewByData = (d) => {
+    console.log("hit setViewByFunction()", this.state);
+    switch (d) {
+      case "weekday":
+        this.setState({
+          currentDisplay: this.weekdayData,
+          timeFormatting: "%A"
+        });
+        break;
+      case "hour":
+        this.setState({
+          currentDisplay: this.hourData,
+          timeFormatting: "%H h"
+        })
+        break;
+      default:
+        break;
     }
+  };
 
-    componentWillMount(){
-        firebaseAPI.getStreams().then((data)=>{this.setState({streams: data})})
-    }
 
-    listStreams = () => {
-        if(this.state.streams) {
-           return _.map(this.state.streams, (s)=>{
-                return <div>{s.createTime}</div> 
-            })
-        }
-    }
+  render() {
+    return (
+      <div>
+        <div className="dropdown">
+          <button
+            className="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            {this.state.viewBy}
+          </button>
+          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a className={"dropdown-item"} onClick={(e) => {this.changeViewByData("weekday")}}>
+              Week Day
+            </a>
+            <a className={"dropdown-item"} onClick={(e) => {this.changeViewByData("hour")}}>
+              Hour
+            </a>
+          </div>
+        </div>
 
-    render()
-    {
-        return (
-            <div>
-                {this.listStreams()}
-            </div>
-        )
-    }
+        {this.state.loaded ? (
+          <BarChart data={this.state.currentDisplay} timeFormatting={this.state.timeFormatting}/>
+        ) : null}
+      </div>
+    );
+  }
 }
 
 export default Home;
