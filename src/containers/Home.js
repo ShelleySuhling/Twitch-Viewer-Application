@@ -3,33 +3,29 @@ import * as _ from "lodash";
 import * as firebaseAPI from "../firebase/firebaseAPI";
 import BarChart from "../components/BarChart";
 import bootstrap from "bootstrap";
-import * as d3helpers from '../helpers/d3-helpers'
+import * as d3helpers from "../helpers/d3-helpers";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = {loaded: false};
+    this.state = { loaded: false };
   }
 
   componentWillMount() {
-    firebaseAPI.getStreams().then((streams)=>{
-      let tmp_data = d3helpers.pruneAndSort(streams)
-      this.hourData = d3helpers.getAverageViewersByHour(tmp_data)
-      this.weekdayData = d3helpers.getAverageViewersByWeekday(tmp_data)
+    firebaseAPI.getStreams().then(streams => {
+      let tmp_data = d3helpers.pruneAndSort(streams);
+      this.hourData = d3helpers.getAverageViewersByHour(tmp_data);
+      this.weekdayData = d3helpers.getAverageViewersByWeekday(tmp_data);
       this.setState({
         data: tmp_data,
         currentDisplay: this.hourData,
-        timeFormatting: "%H h", 
-        loaded: true,
-      })
-    })
-  
-    
-    console.log("componentWillMount", this.state)
+        timeFormatting: "%H h",
+        loaded: true
+      });
+    });
   }
 
-  changeViewByData = (d) => {
-    console.log("hit setViewByFunction()", this.state);
+  changeViewByData = d => {
     switch (d) {
       case "weekday":
         this.setState({
@@ -41,13 +37,12 @@ class Home extends Component {
         this.setState({
           currentDisplay: this.hourData,
           timeFormatting: "%H h"
-        })
+        });
         break;
       default:
         break;
     }
   };
-
 
   render() {
     return (
@@ -64,17 +59,30 @@ class Home extends Component {
             {this.state.viewBy}
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a className={"dropdown-item"} onClick={(e) => {this.changeViewByData("weekday")}}>
+            <a
+              className={"dropdown-item"}
+              onClick={e => {
+                this.changeViewByData("weekday");
+              }}
+            >
               Week Day
             </a>
-            <a className={"dropdown-item"} onClick={(e) => {this.changeViewByData("hour")}}>
+            <a
+              className={"dropdown-item"}
+              onClick={e => {
+                this.changeViewByData("hour");
+              }}
+            >
               Hour
             </a>
           </div>
         </div>
 
         {this.state.loaded ? (
-          <BarChart data={this.state.currentDisplay} timeFormatting={this.state.timeFormatting}/>
+          <BarChart
+            data={this.state.currentDisplay}
+            timeFormatting={this.state.timeFormatting}
+          />
         ) : null}
       </div>
     );

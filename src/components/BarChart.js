@@ -5,10 +5,6 @@ import moment from "moment";
 import * as d3helpers from "../helpers/d3-helpers";
 
 class BarChart extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.setState({
       data: this.props.data,
@@ -16,17 +12,16 @@ class BarChart extends Component {
     });
   }
 
-  static getDerivedStateFromProps(nextProps, prevState){
+  static getDerivedStateFromProps(nextProps, prevState) {
     return {
       data: nextProps.data,
       timeFormatting: nextProps.timeFormatting
-    }
+    };
   }
 
   renderBarChart = () => {
+    console.log('this.node', this.node)
     var viewers = this.props.data;
-    // console.log("VIEWERS", viewers);
-
     var formatTime = d3.timeFormat(this.props.timeFormatting);
     var days = _.map(this.props.data, d => {
       return formatTime(new Date(d.datetime));
@@ -124,11 +119,16 @@ class BarChart extends Component {
     // .on('mouseout', this.onBarMouseOut)
   };
 
+  clearPreviousSvg = () => {
+    d3.selectAll('svg').remove();
+
+
+  }
+
   render() {
+    this.clearPreviousSvg()
     this.renderBarChart();
-    return (
-        <div ref={node => (this.node = node)} />
-    );
+    return <div ref={node => (this.node = node)} />;
   }
 }
 export default BarChart;
