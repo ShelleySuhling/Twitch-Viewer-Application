@@ -10,6 +10,19 @@ class BarChart extends Component {
       data: this.props.data,
       timeFormatting: this.props.timeFormatting
     });
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.updateWindowDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions = () => {
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -20,18 +33,15 @@ class BarChart extends Component {
   }
 
   renderBarChart = () => {
-    console.log('this.node', this.node)
     var viewers = this.props.data;
     var formatTime = d3.timeFormat(this.props.timeFormatting);
     var days = _.map(this.props.data, d => {
       return formatTime(new Date(d.datetime));
     });
 
-    var margin = { top: 5, right: 5, bottom: 50, left: 50 };
-    // here, we want the full chart to be 700x200, so we determine
-    // the width and height by subtracting the margins from those values
-    var fullWidth = 700;
-    var fullHeight = 200;
+    var margin = { top: 5, right: this.state.width/5, bottom: 50, left: 50 };
+    var fullWidth = this.state.width;
+    var fullHeight = 300;
     // the width and height values will be used in the ranges of our scales
     var width = fullWidth - margin.right - margin.left;
     var height = fullHeight - margin.top - margin.bottom;
@@ -90,6 +100,10 @@ class BarChart extends Component {
       .style("font-size", 14)
       .text("viewers");
 
+    var div = d3.select(this.node).append("div")   
+      .attr("class", "tooltip")               
+      .style("opacity", 0);
+
     var barHolder = svg.append("g").classed("bar-holder", true);
 
     var bars = barHolder
@@ -99,34 +113,42 @@ class BarChart extends Component {
       .append("rect")
       .classed("bar", true)
       .attr("x", function(d, i) {
-        // the x value is determined using the
-        // month of the datum
-        // console.log(d, i)
-        // return dateScale(d.datetime);
         return dateScale(formatTime(moment(d.datetime)));
       })
       .attr("width", bandwidth)
       .attr("y", function(d) {
-        // the y position is determined by the datum's temp
-        // this value is the top edge of the rectangle
         return viewerScale(d.viewers);
       })
       .attr("height", function(d) {
-        // the bar's height should align it with the base of the chart (y=0)
         return height - viewerScale(d.viewers);
-      });
-    // .on('mouseover', this.onBarMouseOver)
-    // .on('mouseout', this.onBarMouseOut)
+      })
+      .style("fill", "blue")
+      .style("stroke", "light-blue")
+      .on("mouseover", function(d) {
+        console.log('mouseover')      
+        div.transition()        
+            .duration(200)      
+            .style("opacity", 1.4);      
+        div.html("Time: " + formatTime(d.datetime) + "<br/> Avg:"  + d.viewers)  
+            .style("left", (d3.event.pageX) + "px")     
+            .style("top", (d3.event.pageY - 28) + "px");    
+        })                  
+    .on("mouseout", function(d) {       
+        div.transition()        
+            .duration(500)      
+            .style("opacity", 0);   
+    });
+
+
+
   };
 
   clearPreviousSvg = () => {
-    d3.selectAll('svg').remove();
-
-
-  }
+    d3.selectAll("svg").remove();
+  };
 
   render() {
-    this.clearPreviousSvg()
+    this.clearPreviousSvg();
     this.renderBarChart();
     return <div ref={node => (this.node = node)} />;
   }

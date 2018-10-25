@@ -20,6 +20,7 @@ class Home extends Component {
         data: tmp_data,
         currentDisplay: this.hourData,
         timeFormatting: "%H h",
+        viewLabel: "Hour",
         loaded: true
       });
     });
@@ -30,13 +31,15 @@ class Home extends Component {
       case "weekday":
         this.setState({
           currentDisplay: this.weekdayData,
-          timeFormatting: "%A"
+          timeFormatting: "%A",
+          viewLabel: "Week Day"
         });
         break;
       case "hour":
         this.setState({
           currentDisplay: this.hourData,
-          timeFormatting: "%H h"
+          timeFormatting: "%H h",
+          viewLabel: "Hour"
         });
         break;
       default:
@@ -44,48 +47,51 @@ class Home extends Component {
     }
   };
 
-  render() {
+  renderDropDown = () => {
     return (
-      <div>
-        <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          {this.state.viewLabel}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a
+            className={"dropdown-item"}
+            onClick={e => {
+              this.changeViewByData("weekday");
+            }}
           >
-            {this.state.viewBy}
-          </button>
-          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a
-              className={"dropdown-item"}
-              onClick={e => {
-                this.changeViewByData("weekday");
-              }}
-            >
-              Week Day
-            </a>
-            <a
-              className={"dropdown-item"}
-              onClick={e => {
-                this.changeViewByData("hour");
-              }}
-            >
-              Hour
-            </a>
-          </div>
+            Week Day
+          </a>
+          <a
+            className={"dropdown-item"}
+            onClick={e => {
+              this.changeViewByData("hour");
+            }}
+          >
+            Hour
+          </a>
         </div>
-
-        {this.state.loaded ? (
-          <BarChart
-            data={this.state.currentDisplay}
-            timeFormatting={this.state.timeFormatting}
-          />
-        ) : null}
       </div>
     );
+  };
+
+  render() {
+    return this.state.loaded ? (
+      <div className="Home-container">
+        {this.renderDropDown()}
+        <BarChart
+          data={this.state.currentDisplay}
+          timeFormatting={this.state.timeFormatting}
+        />
+      </div>
+    ) : null;
   }
 }
 

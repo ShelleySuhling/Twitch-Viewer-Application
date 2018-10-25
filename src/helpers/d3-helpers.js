@@ -8,10 +8,9 @@ export let pruneAndSort = api_data => {
             viewers: sumViewersInStreamArray(d.fields.data.arrayValue.values)
           }
   })
-  let re = _.sortBy(tmp, d => {
+  return _.sortBy(tmp, d => {
     return d.datetime;
   });
-  return re
 }
 
 export let sumViewersInStreamArray = stream_array => {
@@ -21,7 +20,6 @@ export let sumViewersInStreamArray = stream_array => {
   });
   return viewer_sum;
 };
-
 
 export let getAverageViewersByHour = data => {
   let temp_obj = {};

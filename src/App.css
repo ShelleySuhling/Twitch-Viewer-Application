@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  height: 100%;
 }
 
 .App-logo {
@@ -16,6 +17,31 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.Home-container{
+  height: 100%;
+  padding: 100px 50px;
+  display: flex;
+}
+
+.dropdown-menu {
+  width: 100%;
+}
+
+.btn{
+ width: 100%;
+}
+
+div.tooltip {   
+  position: absolute;           
+  text-align: center;                           
+  padding: 5px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
 }
 
 @keyframes App-logo-spin {

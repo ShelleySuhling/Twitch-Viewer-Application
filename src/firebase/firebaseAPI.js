@@ -10,7 +10,7 @@ export let getStreams = () => {
   return axios_instance
     .get("/new-viewer-data", {
       params: {
-        page_size: 99
+        page_size: 200
       }
     })
     .then(res => {
