@@ -1,2 +1,1 @@
-Redux File Organization: https://code.likeagirl.io/tutorial-for-adding-redux-to-a-react-app-1a94cc1738e5
 Embedding machine learning models: https://towardsdatascience.com/embedding-machine-learning-models-to-web-apps-part-1-6ab7b55ee428
