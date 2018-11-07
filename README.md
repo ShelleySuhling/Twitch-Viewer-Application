@@ -7,7 +7,7 @@ The backend uses a Firestore cloud database. Data is pulled once every hour usin
 ## Future Work
   - Tensor Flow linear regression to predict number of viewers depending on hour or day selected.
   - Personal viewer analysis by importing twitch streamer data.
-  - Heat map type display instead or in addition to bar chart to display viewers (similar to GitHub's commit chart)
+  - Heat map type display instead of or in addition to bar chart to display viewers (similar to GitHub's commit chart)
   
 ## REsources
 Redux File Organization: https://code.likeagirl.io/tutorial-for-adding-redux-to-a-react-app-1a94cc1738e5
