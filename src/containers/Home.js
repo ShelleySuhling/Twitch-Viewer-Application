@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import * as _ from "lodash";
 import * as firebaseAPI from "../firebase/firebaseAPI";
 import BarChart from "../components/BarChart";
 import bootstrap from "bootstrap";
@@ -13,13 +12,10 @@ class Home extends Component {
 
   componentWillMount() {
     firebaseAPI.getStreams().then(streams => {
-      let tmp_data = d3helpers.pruneAndSort(streams);
-      this.hourData = d3helpers.getAverageViewersByHour(tmp_data);
-      this.weekdayData = d3helpers.getAverageViewersByWeekday(tmp_data);
+      this.hourData = d3helpers.averageByTimeFormat(streams, 'h A');
+      this.weekdayData = d3helpers.averageByTimeFormat(streams, 'dddd');
       this.setState({
-        data: tmp_data,
         currentDisplay: this.hourData,
-        timeFormatting: "%H h",
         viewLabel: "Hour",
         loaded: true
       });
@@ -31,14 +27,12 @@ class Home extends Component {
       case "weekday":
         this.setState({
           currentDisplay: this.weekdayData,
-          timeFormatting: "%A",
           viewLabel: "Week Day"
         });
         break;
       case "hour":
         this.setState({
           currentDisplay: this.hourData,
-          timeFormatting: "%H h",
           viewLabel: "Hour"
         });
         break;
