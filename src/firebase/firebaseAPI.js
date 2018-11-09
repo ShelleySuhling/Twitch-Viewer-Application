@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as _ from "lodash";
 
 const axios_instance = axios.create({
   baseURL:
@@ -10,7 +9,7 @@ export let getStreams = () => {
   return axios_instance
     .get("/new-viewer-data", {
       params: {
-        page_size: 200
+        page_size: 500
       }
     })
     .then(res => {
