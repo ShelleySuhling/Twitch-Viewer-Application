@@ -9,6 +9,6 @@ The backend uses a Firestore cloud database. Data is pulled once every hour usin
   - Personal viewer analysis by importing twitch streamer data.
   - Heat map type display instead of or in addition to bar chart to display viewers (similar to GitHub's commit chart)
   
-## REsources
+## Resources
 Redux File Organization: https://code.likeagirl.io/tutorial-for-adding-redux-to-a-react-app-1a94cc1738e5
 Embedding machine learning models: https://towardsdatascience.com/embedding-machine-learning-models-to-web-apps-part-1-6ab7b55ee428

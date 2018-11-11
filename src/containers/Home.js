@@ -12,8 +12,8 @@ class Home extends Component {
 
   componentWillMount() {
     firebaseAPI.getStreams().then(streams => {
-      this.hourData = d3helpers.averageByTimeFormat(streams, 'h A');
-      this.weekdayData = d3helpers.averageByTimeFormat(streams, 'dddd');
+      this.hourData = d3helpers.processDataByTimeFormat(streams, 'h A');
+      this.weekdayData = d3helpers.processDataByTimeFormat(streams, 'dddd');
       this.setState({
         currentDisplay: this.hourData,
         viewLabel: "Hour",

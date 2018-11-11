@@ -37,7 +37,6 @@ class BarChart extends Component {
 
   renderBarChart = () => {
     var viewers = this.props.data;
-    var formatTime = d3.timeFormat(this.props.timeFormatting);
     var x_labels = _.map(this.props.data, d => {
       return d.datetime;
     });
@@ -132,7 +131,7 @@ class BarChart extends Component {
         div.transition()        
             .duration(200)      
             .style("opacity", 1.4);      
-        div.html("Time: " + formatTime(d.datetime) + "<br/> Avg:"  + d.average)  
+        div.html("Time: " + d.datetime + "<br/> Avg:"  + d.average)  
             .style("left", (d3.event.pageX) + "px")     
             .style("top", (d3.event.pageY - 28) + "px");    
         })                  
