@@ -85,7 +85,7 @@ class Home extends Component {
           timeFormatting={this.state.timeFormatting}
         />
       </div>
-    ) : null;
+    ) : "loading";
   }
 }
 

@@ -102,7 +102,9 @@ class BarChart extends Component {
       .style("font-size", 14)
       .text("viewers");
 
-    var div = d3.select(this.node).append("div")   
+      svg.select("g").classed("x axis", true)
+
+    var tooltip = d3.select(this.node).append("div")   
       .attr("class", "tooltip")               
       .style("opacity", 0);
 
@@ -128,18 +130,24 @@ class BarChart extends Component {
       .style("stroke", "light-blue")
       .on("mouseover", function(d) {
         console.log('mouseover')      
-        div.transition()        
+        tooltip.transition()        
             .duration(200)      
             .style("opacity", 1.4);      
-        div.html("Time: " + d.datetime + "<br/> Avg:"  + d.average)  
+        tooltip.html("Time: " + d.datetime + "<br/> Avg:"  + d.average)  
             .style("left", (d3.event.pageX) + "px")     
             .style("top", (d3.event.pageY - 28) + "px");    
         })                  
     .on("mouseout", function(d) {       
-        div.transition()        
+        tooltip.transition()        
             .duration(500)      
             .style("opacity", 0);   
     });
+
+    barHolder
+    .selectAll("rect.bar")
+    .transition()
+    .attr("delay", function(d,i){return 1000*i})
+    .style("height", function(d) {return height - viewerScale(d.average)})
 
 
 
